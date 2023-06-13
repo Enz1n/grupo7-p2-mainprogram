@@ -2,6 +2,7 @@ package adt.hashtable;
 
 
 import adt.linkedlist.MyList;
+import adt.linkedlist.Node;
 
 public class HashLinkedList<K, V> implements MyList<HashNode<K, V>> {
     private HashNode<K, V> first;
@@ -23,6 +24,11 @@ public class HashLinkedList<K, V> implements MyList<HashNode<K, V>> {
                 last = node;
             }
         }
+    }
+
+    @Override
+    public Node<HashNode<K, V>> getObject(HashNode<K, V> value) {
+        return null;
     }
 
     @Override
@@ -102,6 +108,12 @@ public class HashLinkedList<K, V> implements MyList<HashNode<K, V>> {
             return size;
         }
     }
+
+    @Override
+    public boolean contains(HashNode<K, V> value) {
+        return false;
+    }
+
 
     public void print() {
         HashNode<K, V> current = first;

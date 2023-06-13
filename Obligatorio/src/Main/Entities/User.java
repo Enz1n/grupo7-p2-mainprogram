@@ -2,6 +2,8 @@ package entities;
 
 import adt.linkedlist.MyLinkedList;
 
+import java.util.Objects;
+
 public class User {
     private static long idCounter = 0;
     private long id;
@@ -59,5 +61,20 @@ public class User {
         this.favourites = favourites;
     }
 
+    public MyLinkedList<Tweets> getTweets() {
+        return tweets;
+    }
+
+    public void setTweets(MyLinkedList<Tweets> tweets) {
+        this.tweets = tweets;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(name, user.name);
+    }
 
 }

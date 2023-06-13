@@ -13,4 +13,12 @@ public class Hashtag {
     public Hashtag() {
         this.id =  id + 1;
     }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

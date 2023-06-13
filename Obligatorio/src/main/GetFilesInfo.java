@@ -9,14 +9,20 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+
 
 public class GetFilesInfo {
     private static final String csvFile = "src/main/resources/f1_dataset_test.csv";
     private static final String driversFile = "src/main/resources/drivers.txt";
     public MyLinkedList<String> driversLinkedList = new MyLinkedList<>();
+
+    public  MyLinkedList<User> Users = new MyLinkedList<>();
+    public  MyLinkedList<Tweets> Tweets = new MyLinkedList<>();
+
+
     public void GetDriversInfo() {
 
 
@@ -29,58 +35,68 @@ public class GetFilesInfo {
             e.printStackTrace();
         }
     }
+    public static String formatDate(String dateString) {
+        String[] dateTimeParts = dateString.split(" "); // Dividir la cadena en fecha y hora
+        String datePart = dateTimeParts[0]; // Obtener la parte de la fecha
 
+        String[] dateComponents = datePart.split("-"); // Dividir la fecha en componentes (año, mes, día)
+        String year = dateComponents[0];
+        String month = dateComponents[1];
+        String day = dateComponents[2];
+
+        // Reorganizar los componentes de fecha para obtener el formato deseado (YYYY-MM-DD)
+        String formattedDate = year + "-" + month + "-" + day;
+        //System.out.println(formattedDate);
+        return formattedDate;
+    }
 
     public void GetUsersInfo() throws FileNotValidException {
-        MyLinkedList<User> Users = new MyLinkedList<>();
+
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
              CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
             int count = 0;
             for (CSVRecord csvRecord : csvParser) {
+                count = ++count;
+                MyLinkedList<Hashtag> hashtags = new MyLinkedList<>();
                 String[] values = csvRecord.values();
-                String dateString = values[9]; // Obtén la cadena de texto que representa la fecha del tweet
-                String[] inputFormats = {"M/d/yyyy h:mm:ss a", "yyyy-MM-dd HH:mm:ss"};
-                String outputFormat = "yyyy-MM-dd"; // Formato de salida deseado
-                Hashtag hashTag = new Hashtag();
                 try {
+
+                    Tweets tweet = new Tweets();
+                    String dateString = values[9];
+                    tweet.setDate(formatDate(dateString));
+                    tweet.setId(Long.valueOf(values[0]));
+                    tweet.setContent(values[10]);
+                    String hashtagsString = values[11];
+                    if (!hashtagsString.isEmpty()) {
+                        String[] hashtagArray = hashtagsString.replace("[", "").replace("]", "").split(", ");
+                        for (String hashtagText : hashtagArray) {
+                            Hashtag hashtag = new Hashtag();
+                            hashtag.setText(hashtagText);
+                            hashtags.add(hashtag);
+                        }
+                    }
+                    tweet.setHashtags(hashtags);
+                    tweet.setSource(values[12]);
+                    tweet.setRetweet(Boolean.parseBoolean(values[13]));
+                    Tweets.add(tweet);
+
 
                     User user = new User();
                     user.setName(values[1]);
-                    ;
                     user.setFavourites(Integer.parseInt(values[7]));
                     user.setVerified(Boolean.parseBoolean(values[8]));
-
-                    SimpleDateFormat outputFormatter = new SimpleDateFormat(outputFormat);
-
-                    Date date = null;
-                    for (String inputFormat : inputFormats) {
-                        try {
-                            SimpleDateFormat inputFormatter = new SimpleDateFormat(inputFormat);
-                            date = inputFormatter.parse(dateString); // Intenta analizar la fecha utilizando el formato actual
-                            break; // Sal del bucle si el análisis es exitoso
-                        } catch (ParseException ignored) {
-                        }
+                    if (Users.contains(user)){
+                        User existingUser = Users.getObject(user).getValue();
+                        existingUser.getTweets().add(tweet);
+                    }else {
+                        user.getTweets().add(tweet);
+                        Users.add(user);
+                        System.out.println();
                     }
 
-                    String formattedDate = null;
-
-                    if (date != null) {
-                        formattedDate = outputFormatter.format(date);
-                        System.out.println(formattedDate); // Imprime la fecha en formato "YYYY-MM-DD"
-                        count = ++count;
-                        System.out.println("Cuenta : " + count);
-                        System.out.println(csvRecord.getRecordNumber());
-                    } else {
-                        System.out.println("No se pudo analizar la fecha");
-                    }
-
-                    Tweets tweet = new Tweets();
-                    tweet.setDate(formattedDate);
-
-                } catch (Exception ignored) {
-
-                }
+                } catch (Exception ignored) {}
             }
+            System.out.println("Total de registros procesados: " + count);
         } catch (IOException e) {
             throw new FileNotValidException("FILE_ERROR_FORMAT", e);
         }
