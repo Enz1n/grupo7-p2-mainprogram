@@ -1,14 +1,19 @@
+import adt.linkedlist.Node;
+import entities.Tweets;
 import exception.FileNotValidException;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class main {
+    private static GetFilesInfo Csv;
     public static void main(String[] args) throws FileNotValidException {
-       // start();
-        GetFilesInfo File = new GetFilesInfo();
+        Csv = new GetFilesInfo();
         //File.GetDriversInfo();
-        File.GetUsersInfo();
+        Csv.GetUsersInfo();
+        start();
     }
+
 
     private static void start() {
         Scanner scanner = new Scanner(System.in);
@@ -86,6 +91,22 @@ public class main {
     }
 
     private static void contarTweetsConPalabraFrase(Scanner scanner) {
-        // Implementa la lógica para contar la cantidad de tweets con una palabra o frase específica
+
+        System.out.print("Ingrese la palabra clave: ");
+        scanner.nextLine();
+        String keyword = scanner.nextLine();
+        int count = 0;
+        Node<Tweets> current = Csv.getTweets().getFirst(); // Accede a la lista enlazada de tweets
+
+        while (current != null) {
+            Tweets tweet = current.getValue();
+            if (tweet.getContent().toLowerCase().contains(keyword.toLowerCase())) {
+                count++;
+            }
+            current = current.getNext();
+        }
+
+        System.out.println("Número de tweets con la palabra o frase '" + keyword + "': " + count);
+
     }
 }

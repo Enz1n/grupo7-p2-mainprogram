@@ -2,7 +2,8 @@ package entities;
 
 public class Hashtag {
 
-    private long id = 0;
+    private long id;
+    private static long idCounter = 0;
 
     private String text;
     public Hashtag(long id, String text) {
@@ -11,7 +12,7 @@ public class Hashtag {
     }
 
     public Hashtag() {
-        this.id =  id + 1;
+        this.id = ++idCounter;;
     }
 
     public String getText() {

@@ -25,7 +25,7 @@ public class User {
     }
 
     public User() {
-        this.id = ++idCounter;;
+        this.id = ++idCounter;
         this.tweets = new MyLinkedList<>();
     }
 

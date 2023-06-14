@@ -4,6 +4,22 @@ public class MyLinkedList<T> implements MyList<T>{
     private Node<T> first;
     private Node<T> last;
 
+    public Node<T> getFirst() {
+        return first;
+    }
+
+    public void setFirst(Node<T> first) {
+        this.first = first;
+    }
+
+    public Node<T> getLast() {
+        return last;
+    }
+
+    public void setLast(Node<T> last) {
+        this.last = last;
+    }
+
     public MyLinkedList() {
         this.first = null;
         this.last = null;

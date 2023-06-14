@@ -68,7 +68,7 @@ public class GetFilesInfo {
                     tweet.setContent(values[10]);
                     String hashtagsString = values[11];
                     if (!hashtagsString.isEmpty()) {
-                        String[] hashtagArray = hashtagsString.replace("[", "").replace("]", "").split(", ");
+                        String[] hashtagArray = hashtagsString.replace("[", "").replace("]", "").replace("'", "").split(", ");
                         for (String hashtagText : hashtagArray) {
                             Hashtag hashtag = new Hashtag();
                             hashtag.setText(hashtagText);
@@ -93,13 +93,24 @@ public class GetFilesInfo {
                         Users.add(user);
                         System.out.println();
                     }
-
                 } catch (Exception ignored) {}
             }
             System.out.println("Total de registros procesados: " + count);
         } catch (IOException e) {
             throw new FileNotValidException("FILE_ERROR_FORMAT", e);
         }
+    }
+
+    public MyLinkedList<String> getDriversLinkedList() {
+        return driversLinkedList;
+    }
+
+    public MyLinkedList<User> getUsers() {
+        return Users;
+    }
+
+    public MyLinkedList<entities.Tweets> getTweets() {
+        return Tweets;
     }
 
 }
