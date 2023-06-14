@@ -1,6 +1,8 @@
 package adt.linkedlist;
 
-public class MyLinkedList<T> implements MyList<T>{
+import java.util.List;
+
+public class MyLinkedList<T> implements MyList<T> {
     private Node<T> first;
     private Node<T> last;
 

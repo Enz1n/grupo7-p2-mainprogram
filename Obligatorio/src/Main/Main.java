@@ -1,8 +1,12 @@
+import adt.linkedlist.MyLinkedList;
 import adt.linkedlist.Node;
 import entities.Tweets;
+import entities.User;
 import exception.FileNotValidException;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class main {
@@ -87,8 +91,9 @@ public class main {
     }
 
     private static void topCuentasConMasFavoritos(Scanner scanner) {
-        // Implementa la lógica para mostrar el top de cuentas con más favoritos
+
     }
+
 
     private static void contarTweetsConPalabraFrase(Scanner scanner) {
 
