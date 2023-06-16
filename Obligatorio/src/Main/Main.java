@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
 
-public class main {
+public class Main {
     private static GetFilesInfo Csv;
     public static void main(String[] args) throws FileNotValidException, InvalidDateException {
         Csv = new GetFilesInfo();
