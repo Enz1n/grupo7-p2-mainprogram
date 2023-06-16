@@ -5,10 +5,16 @@ public class MyHashTable<K, V> implements HashTable<K, V> {
     HashLinkedList<K,V>[] buckets;
     int size;
 
-    public MyHashTable(int size) {
-        this.size = size;
-        buckets = (HashLinkedList<K,V>[]) new HashLinkedList[size];
-        for (int i = 0; i < size; i++) {
+    private static final int INITIAL_CAPACITY = 10;
+    private static final double LOAD_FACTOR = 0.75;
+    public MyHashTable() {
+        this(INITIAL_CAPACITY);
+    }
+
+    public MyHashTable(int initialCapacity) {
+        this.size = initialCapacity;
+        this.buckets = (HashLinkedList<K, V>[]) new HashLinkedList[initialCapacity];
+        for (int i = 0; i < initialCapacity; i++) {
             buckets[i] = new HashLinkedList<>();
         }
     }
@@ -28,6 +34,9 @@ public class MyHashTable<K, V> implements HashTable<K, V> {
         } else {
             bucket.add(new HashNode<>(key, value)); // Agrega un nuevo nodo si la clave no existe
         }
+        if ((double) size / buckets.length > LOAD_FACTOR) {
+            rehash();
+        }
     }
     @Override
     public boolean contains(K key) {
@@ -46,12 +55,35 @@ public class MyHashTable<K, V> implements HashTable<K, V> {
 
 
     @Override
-    public V get(K key) {
+    public HashNode<K, V> get(K key) {
       int code = hashCode(key);
-      return buckets[code].get(key);
+      return buckets[code].getNode(key);
     }
 
 
+    private void rehash() {
+        int newCapacity = buckets.length * 2;
+        HashLinkedList<K, V>[] newBuckets = (HashLinkedList<K, V>[]) new HashLinkedList[newCapacity];
+
+        // Initialize new buckets
+        for (int i = 0; i < newCapacity; i++) {
+            newBuckets[i] = new HashLinkedList<>();
+        }
+
+        // Transfer elements from old buckets to new buckets
+        for (int i = 0; i < buckets.length; i++) {
+            HashLinkedList<K, V> bucket = buckets[i];
+            HashNode<K, V> current = bucket.getFirst();
+            while (current != null) {
+                int code = hashCode(current.getKey());
+                newBuckets[code].add(current);
+                current = current.getNext();
+            }
+        }
+
+        // Update reference to new buckets
+        buckets = newBuckets;
+    }
 
     public void printHashTable() {
         for (int i = 0; i < size; i++) {
