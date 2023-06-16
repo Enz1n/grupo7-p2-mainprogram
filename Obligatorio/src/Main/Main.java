@@ -7,7 +7,6 @@ import entities.Tweets;
 import entities.User;
 import exception.FileNotValidException;
 import exception.InvalidDateException;
-
 import java.util.concurrent.TimeUnit;
 import java.io.File;
 import java.util.Collections;
@@ -103,7 +102,30 @@ public class Main {
     }
 
     private static void cantidadHashtagsDistintos(Scanner scanner) throws InvalidDateException {
-
+        System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
+        scanner.nextLine();
+        String date = scanner.nextLine();
+        int hashtagQty = 0;
+        MyLinkedList<String> hashtagMyLinkedList = new MyLinkedList<>();
+        if (isValidDate(date)) {
+            Node<Tweets> current = Csv.getTweets().getFirst();
+            while (current != null) {
+                String tweetDate = current.getValue().getDate();
+                if (tweetDate.equals(date)) {
+                    Node<Hashtag> currentHashtag = current.getValue().getHashtags().getFirst();
+                    while (currentHashtag != null) {
+                        String hashtagText = currentHashtag.getValue().getText().toLowerCase();
+                        if (!(hashtagMyLinkedList.contains(hashtagText))) {
+                            hashtagMyLinkedList.add(hashtagText);
+                            hashtagQty++;
+                        }
+                        currentHashtag = currentHashtag.getNext();
+                    }
+                }
+                current = current.getNext();
+            }
+            System.out.println("La cantidad de hashtags distintos para el día " + date + " es: " + hashtagQty);
+        }else throw new InvalidDateException("Fecha fuera del rango permitido o formato inválido.");
     }
 
 
