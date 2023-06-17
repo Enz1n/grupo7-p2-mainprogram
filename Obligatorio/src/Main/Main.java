@@ -1,51 +1,25 @@
-import adt.hashtable.HashNode;
-import adt.hashtable.MyHashTable;
-import adt.linkedlist.MyLinkedList;
 import adt.linkedlist.Node;
-import entities.Hashtag;
 import entities.Tweets;
-import entities.User;
 import exception.FileNotValidException;
-import exception.InvalidDateException;
-import java.util.concurrent.TimeUnit;
-import java.io.File;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Scanner;
+
 
 public class Main {
     private static GetFilesInfo Csv;
-    public static void main(String[] args) throws FileNotValidException, InvalidDateException {
+    public static void main(String[] args) throws FileNotValidException {
         Csv = new GetFilesInfo();
-        Csv.GetDriversInfo();
+        //File.GetDriversInfo();
         Csv.GetUsersInfo();
         start();
     }
 
-    private static boolean isValidDate(String date) {
-        String dateFormatRegex = "\\d{4}-\\d{2}-\\d{2}";
-
-        if (date.matches(dateFormatRegex)) {
-            String[] dateArray = date.split("-");
-            int year = Integer.parseInt(dateArray[0]);
-            int month = Integer.parseInt(dateArray[1]);
-
-            if ((year == 2021 && month >= 7) || (year == 2022 && month <= 8)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static void start() throws  InvalidDateException {
+    private static void start() {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
 
         while (!exit) {
             displayMenu();
             int option = readOption(scanner);
-
             switch (option) {
                 case 1:
                     listarPilotosActivos(scanner);
@@ -73,7 +47,6 @@ public class Main {
                     break;
             }
         }
-
         scanner.close();
     }
 
@@ -101,86 +74,17 @@ public class Main {
         // Implementa la lógica para mostrar el top de usuarios con más tweets
     }
 
-    private static void cantidadHashtagsDistintos(Scanner scanner) throws InvalidDateException {
-        System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
-        scanner.nextLine();
-        String date = scanner.nextLine();
-        int hashtagQty = 0;
-        MyLinkedList<String> hashtagMyLinkedList = new MyLinkedList<>();
-        if (isValidDate(date)) {
-            Node<Tweets> current = Csv.getTweets().getFirst();
-            while (current != null) {
-                String tweetDate = current.getValue().getDate();
-                if (tweetDate.equals(date)) {
-                    Node<Hashtag> currentHashtag = current.getValue().getHashtags().getFirst();
-                    while (currentHashtag != null) {
-                        String hashtagText = currentHashtag.getValue().getText().toLowerCase();
-                        if (!(hashtagMyLinkedList.contains(hashtagText))) {
-                            hashtagMyLinkedList.add(hashtagText);
-                            hashtagQty++;
-                        }
-                        currentHashtag = currentHashtag.getNext();
-                    }
-                }
-                current = current.getNext();
-            }
-            System.out.println("La cantidad de hashtags distintos para el día " + date + " es: " + hashtagQty);
-        }else throw new InvalidDateException("Fecha fuera del rango permitido o formato inválido.");
+    private static void cantidadHashtagsDistintos(Scanner scanner) {
+        // Implementa la lógica para contar la cantidad de hashtags distintos para un día dado
     }
 
-
-
-    private static void hashtagMasUsado(Scanner scanner) throws  InvalidDateException {
-        MyHashTable<String,Integer> hashtagHash = new MyHashTable<>();
-        System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
-        scanner.nextLine();
-        String date = scanner.nextLine();
-        String maxHashtag = null;
-        int maxCount = 0;
-        if (isValidDate(date)) {
-            Node<Tweets> current = Csv.getTweets().getFirst();
-            while (current != null) {
-                String tweetDate = current.getValue().getDate();
-                if (tweetDate.equals(date)) {
-                    Node<Hashtag> currentHashtag = current.getValue().getHashtags().getFirst();
-                    while (currentHashtag != null) {
-                        String hashtagText = currentHashtag.getValue().getText();
-                        if (!(hashtagHash.contains(hashtagText))) {
-                            if (!currentHashtag.getValue().getText().equalsIgnoreCase("f1")) {
-                                hashtagHash.put(currentHashtag.getValue().getText(), 1);
-                            }
-                        } else {
-                            HashNode<String, Integer> changeNode = hashtagHash.get(currentHashtag.getValue().getText());
-                            int newCount = changeNode.getValue() + 1;
-                            changeNode.setValue(newCount);
-
-                            if (newCount > maxCount) {
-                                maxHashtag = hashtagText;
-                                maxCount = newCount;
-                            }
-                        }
-                        currentHashtag = currentHashtag.getNext();
-                    }
-                }
-                current = current.getNext();
-            }
-
-
-        } else throw new InvalidDateException("Fecha fuera del rango permitido o formato inválido.");
-        // Verificar si se encontró un hashtag más utilizado
-        if (maxHashtag != null) {
-            System.out.println("El hashtag más utilizado es: " + maxHashtag);
-            System.out.println("Aparece " + maxCount + " veces.");
-        } else {
-            System.out.println("No se encontró ningún hashtag en la tabla.");
-        }
-
+    private static void hashtagMasUsado(Scanner scanner) {
+        // Implementa la lógica para encontrar el hashtag más usado para un día dado
     }
 
     private static void topCuentasConMasFavoritos(Scanner scanner) {
-
+        // Implementa la lógica para mostrar el top de cuentas con más favoritos
     }
-
 
     private static void contarTweetsConPalabraFrase(Scanner scanner) {
 
