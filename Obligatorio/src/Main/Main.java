@@ -1,16 +1,14 @@
 import adt.hashtable.HashNode;
 import adt.hashtable.MyHashTable;
+import adt.heap.MyHeap;
 import adt.linkedlist.MyLinkedList;
 import adt.linkedlist.Node;
+import entities.User;
 import entities.Hashtag;
 import entities.Tweets;
-import entities.User;
 import exception.FileNotValidException;
 import exception.InvalidDateException;
-import java.util.concurrent.TimeUnit;
-import java.io.File;
-import java.util.Collections;
-import java.util.Comparator;
+
 import java.util.Scanner;
 
 public class Main {
@@ -178,7 +176,19 @@ public class Main {
     }
 
     private static void topCuentasConMasFavoritos(Scanner scanner) {
-
+        MyLinkedList<User> listaUsers = Csv.getUsers();
+        MyHeap<User> heapUsers = new MyHeap<>(true, false);
+        for (int i = 0; i < listaUsers.size(); i++) {
+            heapUsers.insert(listaUsers.get(i));
+        }
+        User[] top7 = new User[7];
+        for (int i = 0; i < 7 ; i++){
+            top7[i] = heapUsers.deleteAndReturn();
+        }
+        System.out.println("Top 7 cuentas con más favoritos: ");
+        for (int i = 0; i < 7; i++) {
+            System.out.println(top7[i].getName() + " con " + top7[i].getFavourites() + " favoritos.");
+        }
     }
 
 

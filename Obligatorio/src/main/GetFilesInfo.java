@@ -18,14 +18,10 @@ public class GetFilesInfo {
     private static final String csvFile = "src/main/resources/f1_dataset_test.csv";
     private static final String driversFile = "src/main/resources/drivers.txt";
     public MyLinkedList<String> driversLinkedList = new MyLinkedList<>();
-
     public  MyLinkedList<User> Users = new MyLinkedList<>();
     public  MyLinkedList<Tweets> Tweets = new MyLinkedList<>();
 
-
     public void GetDriversInfo() {
-
-
         try (BufferedReader br = new BufferedReader(new FileReader(driversFile))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -38,12 +34,10 @@ public class GetFilesInfo {
     public static String formatDate(String dateString) {
         String[] dateTimeParts = dateString.split(" "); // Dividir la cadena en fecha y hora
         String datePart = dateTimeParts[0]; // Obtener la parte de la fecha
-
         String[] dateComponents = datePart.split("-"); // Dividir la fecha en componentes (año, mes, día)
         String year = dateComponents[0];
         String month = dateComponents[1];
         String day = dateComponents[2];
-
         // Reorganizar los componentes de fecha para obtener el formato deseado (YYYY-MM-DD)
         String formattedDate = year + "-" + month + "-" + day;
         //System.out.println(formattedDate);
@@ -51,7 +45,6 @@ public class GetFilesInfo {
     }
 
     public void GetUsersInfo() throws FileNotValidException {
-
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
              CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
             int count = 0;
@@ -65,7 +58,6 @@ public class GetFilesInfo {
                 MyLinkedList<Hashtag> hashtags = new MyLinkedList<>();
                 String[] values = csvRecord.values();
                 try {
-
                     Tweets tweet = new Tweets();
                     String dateString = values[9];
                     tweet.setDate(formatDate(dateString));
@@ -84,8 +76,6 @@ public class GetFilesInfo {
                     tweet.setSource(values[12]);
                     tweet.setRetweet(Boolean.parseBoolean(values[13]));
                     Tweets.add(tweet);
-
-
                     User user = new User();
                     user.setName(values[1]);
                     user.setFavourites(Integer.parseInt(values[7]));

@@ -1,15 +1,26 @@
 package adt.heap;
 
-public class MyHeap <T extends Comparable<T>> implements Heap<T> {
+import java.util.Arrays;
+
+public class MyHeap<T extends Comparable<T>> implements Heap<T> {
+    private static final int DEFAULT_CAPACITY = 10;
     private T[] values;
     private int lastValuePosition;
     private boolean isHeapMax;
     private boolean isHeapMin;
-    public MyHeap(T[] values, boolean heapMax, boolean heapMin) {
-        this.values = values;
+
+    public MyHeap(boolean heapMax, boolean heapMin) {
+        this.values = (T[]) new Comparable[DEFAULT_CAPACITY];
         this.lastValuePosition = 0;
         this.isHeapMax = heapMax;
         this.isHeapMin = heapMin;
+    }
+
+    private void ensureCapacity() {
+        if (lastValuePosition == values.length) {
+            int newCapacity = values.length * 2;
+            values = Arrays.copyOf(values, newCapacity);
+        }
     }
 
     private T getFather (int childPos){
@@ -33,23 +44,24 @@ public class MyHeap <T extends Comparable<T>> implements Heap<T> {
 
     @Override
     public void insert(T value) {
+        ensureCapacity();
         this.values[lastValuePosition] = value;
         int valuePos = lastValuePosition;
         lastValuePosition++;
-        if (isHeapMax == true) {
-            while (valuePos != 0 && value.compareTo(getFather(valuePos))>0){
-                T change = getFather(valuePos);
-                this.values[getFatherPosition(valuePos)] = value;
-                this.values[valuePos] = change;
-                valuePos = getFatherPosition(valuePos);
+
+        if (isHeapMax) {
+            while (valuePos != 0 && value.compareTo(getFather(valuePos)) > 0) {
+                int fatherPos = getFatherPosition(valuePos);
+                swap(valuePos, fatherPos);
+                valuePos = fatherPos;
             }
         }
-        if (isHeapMin==true) {
-            while (valuePos!=0 && value.compareTo(getFather(valuePos))<0){
-                T change = getFather(valuePos);
-                this.values[getFatherPosition(valuePos)] = value;
-                this.values[valuePos] = change;
-                valuePos = getFatherPosition(valuePos);
+
+        if (isHeapMin) {
+            while (valuePos != 0 && value.compareTo(getFather(valuePos)) < 0) {
+                int fatherPos = getFatherPosition(valuePos);
+                swap(valuePos, fatherPos);
+                valuePos = fatherPos;
             }
         }
     }
@@ -75,7 +87,6 @@ public class MyHeap <T extends Comparable<T>> implements Heap<T> {
         return root;
     }
 
-    // Restablecer el orden del heap en caso de ser un Heap máximo
     private void heapifyMax(int index) {
         int largest = index;
         int leftChild = getLeftChildPosition(index);
@@ -95,7 +106,6 @@ public class MyHeap <T extends Comparable<T>> implements Heap<T> {
         }
     }
 
-    // Restablecer el orden del heap en caso de ser un Heap mínimo
     private void heapifyMin(int index) {
         int smallest = index;
         int leftChild = getLeftChildPosition(index);
@@ -120,6 +130,13 @@ public class MyHeap <T extends Comparable<T>> implements Heap<T> {
         T temp = values[i];
         values[i] = values[j];
         values[j] = temp;
+    }
+
+    public T get(int index) {
+        if (index < 0 || index >= lastValuePosition) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
+        }
+        return values[index];
     }
 
 

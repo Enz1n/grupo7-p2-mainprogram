@@ -4,7 +4,7 @@ import adt.linkedlist.MyLinkedList;
 
 import java.util.Objects;
 
-public class User {
+public class User implements Comparable<User> {
     private static long idCounter = 0;
     private long id;
 
@@ -72,9 +72,12 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(name, user.name);
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(getName(), user.getName());
     }
 
+    @Override
+    public int compareTo(User o) {
+        return Integer.compare(this.getFavourites(), o.getFavourites());
+    }
 }
