@@ -1,11 +1,10 @@
 import adt.linkedlist.Node;
 import entities.Tweets;
 import exception.FileNotValidException;
-
-import java.io.File;
 import java.util.Scanner;
 
-public class main {
+
+public class Main {
     private static GetFilesInfo Csv;
     public static void main(String[] args) throws FileNotValidException {
         Csv = new GetFilesInfo();
@@ -14,7 +13,6 @@ public class main {
         start();
     }
 
-
     private static void start() {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
@@ -22,7 +20,6 @@ public class main {
         while (!exit) {
             displayMenu();
             int option = readOption(scanner);
-
             switch (option) {
                 case 1:
                     listarPilotosActivos(scanner);
@@ -50,7 +47,6 @@ public class main {
                     break;
             }
         }
-
         scanner.close();
     }
 

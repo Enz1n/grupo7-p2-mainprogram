@@ -15,13 +15,11 @@ import java.time.format.DateTimeFormatter;
 
 
 public class GetFilesInfo {
-    private static final String csvFile = "src/main/resources/f1_dataset_test.csv";
-    private static final String driversFile = "src/main/resources/drivers.txt";
+    private static final String csvFile = "src/Main/resources/f1_dataset_test.csv";
+    private static final String driversFile = "src/Main/resources/drivers.txt";
     public MyLinkedList<String> driversLinkedList = new MyLinkedList<>();
-
     public  MyLinkedList<User> Users = new MyLinkedList<>();
     public  MyLinkedList<Tweets> Tweets = new MyLinkedList<>();
-
 
     public void GetDriversInfo() {
 
