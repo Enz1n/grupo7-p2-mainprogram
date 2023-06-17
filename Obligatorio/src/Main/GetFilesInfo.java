@@ -55,12 +55,17 @@ public class GetFilesInfo {
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
              CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
             int count = 0;
+            boolean skipFirstLine = true;
             for (CSVRecord csvRecord : csvParser) {
+                if (skipFirstLine) {
+                    skipFirstLine = false;  // Cambiar el valor después de leer la primera línea
+                    continue;  // Saltar el procesamiento de la primera línea
+                }
                 count = ++count;
                 MyLinkedList<Hashtag> hashtags = new MyLinkedList<>();
                 String[] values = csvRecord.values();
-                try {
 
+                try {
                     Tweets tweet = new Tweets();
                     String dateString = values[9];
                     tweet.setDate(formatDate(dateString));
