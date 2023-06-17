@@ -1,6 +1,6 @@
 package adt.hashtable;
 
-public class HashNode<K, V> {
+public class HashNode<K, V extends Comparable<V>> implements Comparable<HashNode<K, V>> {
     private K key;
     private V value;
 
@@ -34,5 +34,10 @@ public class HashNode<K, V> {
 
     public void setNext(HashNode<K, V> next) {
         this.next = next;
+    }
+
+    @Override
+    public int compareTo(HashNode<K, V> o) {
+        return this.getValue().compareTo(o.getValue());
     }
 }

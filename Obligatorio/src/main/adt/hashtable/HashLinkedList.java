@@ -4,7 +4,7 @@ package adt.hashtable;
 import adt.linkedlist.MyList;
 import adt.linkedlist.Node;
 
-public class HashLinkedList<K, V> implements MyList<HashNode<K, V>> {
+public class HashLinkedList<K, V extends Comparable<V>> implements MyList<HashNode<K, V>> {
     private HashNode<K, V> first;
     private HashNode<K, V> last;
 

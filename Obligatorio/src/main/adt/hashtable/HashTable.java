@@ -1,6 +1,6 @@
 package adt.hashtable;
 
-public interface HashTable<K, V> {
+public interface HashTable<K, V extends Comparable<V>> {
         public void put(K key, V value);
         HashNode<K, V> get(K key);
         public boolean contains(K key);

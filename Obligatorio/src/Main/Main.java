@@ -92,8 +92,53 @@ public class Main {
     }
 
     private static void listarPilotosActivos(Scanner scanner) {
-        // Implementa la lógica para listar los pilotos activos más mencionados en los tweets
+
+        MyHashTable<String,Integer> hashTable = new MyHashTable<>();
+        System.out.print("Ingrese el año: ");
+        int year = scanner.nextInt();
+        System.out.print("Ingrese el mes: ");
+        int month = scanner.nextInt();
+
+
+        Node<Tweets> currentTweet = Csv.getTweets().getFirst();
+
+        while (currentTweet != null){
+            Node<String> currentDriver = Csv.getDriversLinkedList().getFirst();
+            String fechaTweet = currentTweet.getValue().getDate();
+            String[] fechaTweetArray = fechaTweet.split("-");
+            int yearTweet = Integer.parseInt(fechaTweetArray[0]);
+            int monthTweet = Integer.parseInt(fechaTweetArray[1]);
+            if ((yearTweet == year && monthTweet == month)){
+                while (currentDriver != null) {
+                    String tweetContent = currentTweet.getValue().getContent().toLowerCase();
+                    String driverName = currentDriver.getValue().toLowerCase();
+
+                    if (!hashTable.contains(currentDriver.getValue().toLowerCase())) {
+                        hashTable.put(currentDriver.getValue().toLowerCase(), 0);
+                    }
+                    if ((tweetContent.toLowerCase().contains(driverName))) {
+                        HashNode<String, Integer> driverChange = hashTable.get(currentDriver.getValue());
+                        driverChange.setValue(driverChange.getValue() + 1);
+                    }
+                    currentDriver = currentDriver.getNext();
+                }
+            }
+            currentTweet = currentTweet.getNext();
+        }
+        MyLinkedList<HashNode<String,Integer>> allEntries = hashTable.getAllEntries();
+        MyHeap<HashNode<String,Integer>> heapDrivers = new MyHeap<>(true, false);
+        Node<HashNode<String,Integer>> currentNode = allEntries.getFirst();
+        while (currentNode != null){
+            heapDrivers.insert(currentNode.getValue());
+            currentNode = currentNode.getNext();
+        }
+        HashNode<String,Integer>[] top10 = new HashNode[10];
+        for (int i = 0; i < 10 ; i++){
+            top10[i] = heapDrivers.deleteAndReturn();
+            System.out.println(top10[i].getKey() + " con " + top10[i].getValue() + " ocurrencias.");
+        }
     }
+
 
     private static void topUsuariosConMasTweets(Scanner scanner) {
         // Implementa la lógica para mostrar el top de usuarios con más tweets

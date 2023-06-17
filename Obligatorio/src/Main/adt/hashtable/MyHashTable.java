@@ -1,6 +1,8 @@
 package adt.hashtable;
 
-public class MyHashTable<K, V> implements HashTable<K, V> {
+import adt.linkedlist.MyLinkedList;
+
+public class MyHashTable<K, V extends Comparable<V>> implements HashTable<K, V> {
 
     HashLinkedList<K,V>[] buckets;
     int size;
@@ -94,7 +96,19 @@ public class MyHashTable<K, V> implements HashTable<K, V> {
         }
     }
 
+    public MyLinkedList<HashNode<K, V>> getAllEntries() {
+        MyLinkedList<HashNode<K, V>> entries = new MyLinkedList<>();
 
+        for (HashLinkedList<K, V> bucket : buckets) {
+            HashNode<K, V> current = bucket.getFirst();
+            while (current != null) {
+                entries.add(current);
+                current = current.getNext();
+            }
+        }
+
+        return entries;
+    }
     @Override
     public void remove(K key) {
         int code = hashCode(key);
