@@ -1,5 +1,8 @@
 package adt.heap;
 
+import adt.linkedlist.MyLinkedList;
+import adt.linkedlist.Node;
+
 import java.util.Arrays;
 
 public class MyHeap<T extends Comparable<T>> implements Heap<T> {
@@ -143,5 +146,43 @@ public class MyHeap<T extends Comparable<T>> implements Heap<T> {
     @Override
     public int size() {
         return lastValuePosition;
+    }
+
+
+    ///
+    public MyHeap(boolean heapMax, boolean heapMin, MyLinkedList<T> linkedList) {
+        this.isHeapMax = heapMax;
+        this.isHeapMin = heapMin;
+
+        // Convertir la MyLinkedList en un array
+        int size = linkedList.size();
+        this.values = (T[]) new Comparable[size];
+        Node<T> current = linkedList.getFirst();
+        int index = 0;
+        while (current != null) {
+            this.values[index++] = current.getValue();
+            current = current.getNext();
+        }
+
+        this.lastValuePosition = size;
+
+        // Construir el heap
+        if (isHeapMax) {
+            buildMaxHeap();
+        } else if (isHeapMin) {
+            buildMinHeap();
+        }
+    }
+
+    private void buildMaxHeap() {
+        for (int i = lastValuePosition / 2 - 1; i >= 0; i--) {
+            heapifyMax(i);
+        }
+    }
+
+    private void buildMinHeap() {
+        for (int i = lastValuePosition / 2 - 1; i >= 0; i--) {
+            heapifyMin(i);
+        }
     }
 }

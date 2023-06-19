@@ -222,17 +222,11 @@ public class Main {
 
     private static void topCuentasConMasFavoritos(Scanner scanner) {
         MyLinkedList<User> listaUsers = Csv.getUsers();
-        MyHeap<User> heapUsers = new MyHeap<>(true, false);
-        for (int i = 0; i < listaUsers.size(); i++) {
-            heapUsers.insert(listaUsers.get(i));
-        }
-        User[] top7 = new User[7];
-        for (int i = 0; i < 7 ; i++){
-            top7[i] = heapUsers.deleteAndReturn();
-        }
+        MyHeap<User> heapUsers = new MyHeap<>(true, false, listaUsers);
         System.out.println("Top 7 cuentas con más favoritos: ");
         for (int i = 0; i < 7; i++) {
-            System.out.println(top7[i].getName() + " con " + top7[i].getFavourites() + " favoritos.");
+            User user = heapUsers.deleteAndReturn();
+            System.out.println(user.getName() + " con " + user.getFavourites() + " favoritos.");
         }
     }
 
