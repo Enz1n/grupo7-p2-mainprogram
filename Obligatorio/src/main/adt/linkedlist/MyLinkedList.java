@@ -132,5 +132,39 @@ public class MyLinkedList<T> implements MyList<T> {
         }
     }
 
+    public boolean isEmpty() {
+        if (first == null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public void addLast(T user) {
+        Node<T> nodeToAdd = new Node<>(user);
+        if (first == null) {
+            first = nodeToAdd;
+            last = nodeToAdd;
+        } else {
+            last.setNext(nodeToAdd);
+            last = nodeToAdd;
+        }
+    }
+
+    public void removeLast() {
+        Node<T> current = first;
+        Node<T> previous = null;
+        while (current.getNext() != null){
+            previous = current;
+            current = current.getNext();
+        }
+        if (previous == null){
+            first = null;
+        }
+        else{
+            previous.setNext(null);
+        }
+    }
 }
 
