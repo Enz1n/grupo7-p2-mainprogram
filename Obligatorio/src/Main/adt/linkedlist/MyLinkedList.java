@@ -110,6 +110,8 @@ public class MyLinkedList<T> implements MyList<T> {
         }
     }
 
+
+
     @Override
     public boolean contains(T value) {
         Node<T> current = first;
@@ -120,6 +122,35 @@ public class MyLinkedList<T> implements MyList<T> {
             current = current.getNext();
         }
         return false;
+    }
+
+    public void swap(int index1, int index2) {
+        if (index1 < 0 || index1 >= size() || index2 < 0 || index2 >= size()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (index1 == index2) {
+            return;
+        }
+
+        Node<T> node1 = getNode(index1);
+        Node<T> node2 = getNode(index2);
+
+        T temp = node1.getValue();
+        node1.setValue(node2.getValue());
+        node2.setValue(temp);
+    }
+
+    public Node<T> getNode(int position) {
+        if (position < 0 || position >= size()) {
+            return null;
+        }
+
+        Node<T> current = first;
+        for (int i = 0; i < position; i++) {
+            current = current.getNext();
+        }
+        return current;
     }
 
     public void print(){

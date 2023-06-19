@@ -139,10 +139,63 @@ public class Main {
         }
     }
 
-
     private static void topUsuariosConMasTweets(Scanner scanner) {
-        // Implementa la lógica para mostrar el top de usuarios con más tweets
+        MyLinkedList<User> users = Csv.getUsers();
+        MyLinkedList<User> top15 = new MyLinkedList<>();
+
+        createTop15UsersList(users, top15);
+        usersByTweetsQty(top15);
+
     }
+
+    public static void createTop15UsersList(MyLinkedList<User> users, MyLinkedList<User> top15) {
+        for (int i = 0; i < users.size(); i++) {
+            User currentUser = users.get(i);
+            if (top15.contains(currentUser)) {
+                continue;
+            }
+            if (top15.size() < 15) {
+                top15.add(currentUser);
+            } else {
+
+                int minIndex = 0;
+                for (int j = 1; j < top15.size(); j++) {
+                    if (top15.get(j).getTweets().size() < top15.get(minIndex).getTweets().size()) {
+                        minIndex = j;
+                    }
+                }
+                if (currentUser.getTweets().size() > top15.get(minIndex).getTweets().size()) {
+                    top15.remove(top15.get(minIndex));
+                    top15.add(currentUser);
+                }
+            }
+        }
+    }
+
+    public static void usersByTweetsQty(MyLinkedList<User> users) {
+        int n = users.size();
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                User user1 = users.get(j);
+                User user2 = users.get(j + 1);
+
+                if (user1.getTweets().size() < user2.getTweets().size()) {
+                    users.swap(j, j + 1);
+                }
+            }
+        }
+        System.out.println("Top 15 usuarios con más tweets:");
+        for (int i = 0; i < 15; i++) {
+            System.out.println(users.get(i).getName() + " con " + users.get(i).getTweets().size() + " tweets.");
+        }
+    }
+
+
+
+
+
+
 
     private static void cantidadHashtagsDistintos(Scanner scanner) throws InvalidDateException {
         System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
