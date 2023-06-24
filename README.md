@@ -39,4 +39,33 @@ Esta función carga información sobre los usuarios y sus tweets desde un archiv
 
 Dentro de cada registro, se extraen los diferentes campos, como la fecha, el ID del tweet, el contenido, los hashtags, la fuente y si es un retweet. Se formatea la fecha utilizando la función `formatDate()`. Los hashtags se separan y se crean objetos `Hashtag`, que se agregan a una lista enlazada. Luego, se crea un objeto `Tweets` y se le asignan los valores correspondientes.
 
+## Reportes
+
+### 1. `listarPilotosActivos(Scanner scanner)`
+
+Esta función genera un reporte de los 10 pilotos activos más mencionados en los tweets. Utiliza una tabla hash (`MyHashTable`) para almacenar y contar las menciones de cada piloto. La lista enlazada (`MyLinkedList`) se utiliza para iterar sobre los tweets y los nombres de los pilotos. Luego, se utiliza un montículo (`MyHeap`) para obtener los pilotos más mencionados.
+
+El código recorre los tweets y, para cada tweet, busca menciones de pilotos. Si se encuentra una coincidencia, se actualiza la cuenta de menciones en la tabla hash. Al final, se obtienen los 10 pilotos con más menciones y se muestran en pantalla.
+
+### 2. `topUsuariosConMasTweets(Scanner scanner)`
+
+Esta función genera un reporte de los 15 usuarios con más tweets. Utiliza una lista enlazada (`MyLinkedList`) para almacenar y ordenar los usuarios por la cantidad de tweets. El código itera sobre la lista de usuarios y utiliza el método `createTop15UsersList` para crear una nueva lista con los usuarios con más tweets. Luego, se utiliza el método `usersByTweetsQty` para ordenar la lista y mostrar los usuarios con más tweets en pantalla.
+
+### 3. `cantidadHashtagsDistintos(Scanner scanner)`
+
+Esta función genera un reporte de la cantidad de hashtags distintos para un día dado. Utiliza una lista enlazada (`MyLinkedList`) para almacenar los hashtags encontrados y un contador para realizar el seguimiento de la cantidad. El código recorre los tweets y, para cada tweet, verifica si pertenece al día ingresado por el usuario. Si es así, busca hashtags únicos y los agrega a la lista enlazada. Al final, se muestra la cantidad de hashtags distintos en pantalla.
+
+### 4. `hashtagMasUsado(Scanner scanner)`
+
+Esta función genera un reporte del hashtag más utilizado para un día dado. Utiliza una tabla hash (`MyHashTable`) para contar la frecuencia de cada hashtag. El código recorre los tweets y, para cada tweet, verifica si pertenece al día ingresado por el usuario. Si es así, cuenta la aparición de cada hashtag en la tabla hash. Al final, se encuentra el hashtag con mayor frecuencia y se muestra en pantalla.
+
+### 5. `topCuentasConMasFavoritos(Scanner scanner)`
+
+Esta función genera un reporte de las 7 cuentas con más favoritos. Utiliza una lista enlazada (`MyLinkedList`) para almacenar los usuarios y un montículo (`MyHeap`) para ordenar los usuarios por la cantidad de favoritos. El código recorre la lista de usuarios y los agrega al montículo. Luego, se eliminan los 7 usuarios con más favoritos del montículo y se muestran en pantalla.
+
+### 6. `contarTweetsConPalabraFrase(Scanner scanner)`
+
+Esta función genera un reporte del número de tweets que contienen una palabra o frase específica. Utiliza una lista enlazada (`MyLinkedList`) para almacenar los tweets. El código recorre la lista de tweets y, para cada tweet, verifica si contiene la palabra o frase ingresada por el usuario. Si es así, se incrementa el contador. Al final, se muestra el número de tweets encontrados en pantalla.
+
+
 Si el usuario ya existe en la lista `Users`, se obtiene una referencia al usuario existente y se agrega el tweet a su lista de tweets. De lo contrario, se crea un nuevo objeto `User` y se le asignan los valores correspondientes, incluido el tweet actual.
