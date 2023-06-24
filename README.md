@@ -6,7 +6,7 @@ El proyecto consiste en una aplicación de análisis de datos de tweets relacion
 
 La aplicación carga dos tipos de datos para su análisis:
 
-1. **Archivo CSV**: El archivo CSV contiene información sobre los tweets relacionados con la Fórmula 1. Se espera que el archivo esté ubicado en la ruta "src/main/resources/f1_dataset_test.csv". Este archivo contiene detalles como el contenido del tweet, la fecha, los hashtags asociados, etc.
+1. **Archivo CSV**: El archivo CSV contiene información sobre los tweets relacionados con la Fórmula 1. Se espera que el archivo esté ubicado en la ruta "src/main/resources/f1_dataset.csv". Este archivo contiene detalles como el contenido del tweet, la fecha, los hashtags asociados, etc.
 
 2. **Archivo de texto**: El archivo de texto contiene información sobre los pilotos activos en la Fórmula 1. Se espera que el archivo esté ubicado en la ruta "src/main/resources/drivers.txt". Cada línea del archivo debe contener el nombre de un piloto.
 
