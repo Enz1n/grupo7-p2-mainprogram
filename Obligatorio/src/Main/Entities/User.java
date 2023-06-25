@@ -1,6 +1,7 @@
 package entities;
 
 import uy.edu.um.prog2.adt.linkedlist.MyLinkedList;
+import entities.Tweets;
 
 import java.util.Objects;
 
