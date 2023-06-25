@@ -1,19 +1,12 @@
 package entities;
-
 import uy.edu.um.prog2.adt.linkedlist.MyLinkedList;
 
 public class Tweets {
-
     private Long id;
-
     private String content;
-
     private String source;
-
     private boolean isRetweet;
-
     private MyLinkedList<Hashtag> Hashtags;
-
     private String date;
 
     public Tweets(Long id, String content, String source, boolean isRetweet, MyLinkedList<Hashtag> hashtags, String date) {
@@ -24,9 +17,7 @@ public class Tweets {
         Hashtags = new MyLinkedList<>();
         this.date = date;
     }
-
     public Tweets() {
-
     }
 
     public Long getId() {

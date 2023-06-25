@@ -1,5 +1,9 @@
 package uy.edu.um.prog2.adt.linkedlist;
 
+
+import uy.edu.um.prog2.adt.stack.MyStack;
+import uy.edu.um.prog2.adt.stack.Stack;
+
 public class MyLinkedList<T> implements MyList<T> {
     private Node<T> first;
     private Node<T> last;
@@ -195,5 +199,61 @@ public class MyLinkedList<T> implements MyList<T> {
             previous.setNext(null);
         }
     }
+
+    public void quicksort() {
+        if (first != null && first != last) {
+            first = quicksortRecursive(first, last);
+        }
+    }
+
+    private Node<T> quicksortRecursive(Node<T> head, Node<T> tail) {
+        if (head == null || head == tail) {
+            return head;
+        }
+
+        Node<T> pivot = tail;
+        Node<T> prev = null;
+        Node<T> current = head;
+
+        while (current != pivot) {
+            if (compareTweetsQty(current.getValue(), pivot.getValue()) <= 0) {
+                if (prev != null) {
+                    prev.setNext(current.getNext());
+                }
+                if (current == head) {
+                    head = current.getNext();
+                }
+                Node<T> temp = current.getNext();
+                current.setNext(pivot.getNext());
+                pivot.setNext(current);
+                current = temp;
+            } else {
+                prev = current;
+                current = current.getNext();
+            }
+        }
+
+        Node<T> newHead = quicksortRecursive(head, prev.getNext());
+        Node<T> newTail = pivot.getNext();
+        pivot.setNext(quicksortRecursive(pivot.getNext(), tail));
+
+        if (newHead == null) {
+            return pivot;
+        }
+
+        return newHead;
+    }
+
+
+    private int compareTweetsQty(T user1, T user2) {
+        int tweetsQty1 = ((entities.User) user1).getTweets().size();
+        int tweetsQty2 = ((entities.User) user2).getTweets().size();
+        return Integer.compare(tweetsQty1, tweetsQty2);
+    }
+
+
+
+
+
 }
 

@@ -20,23 +20,15 @@ public class Main {
         start();
     }
 
-    public static void Calculareficiencia(Runnable code) {
-        // Inicio de la medición del tiempo de ejecución
+    public static void calcularEficiencia(Runnable code) {
         long startTime = System.currentTimeMillis();
-
-        // Ejecución del código
         code.run();
-
-        // Finalización de la medición del tiempo de ejecución
         long endTime = System.currentTimeMillis();
-        long duration = endTime - startTime; // Duración en milisegundos
-
-        // Cálculo de la cantidad de memoria consumida
+        long duration = endTime - startTime;
         Runtime rt = Runtime.getRuntime();
         long totalMemory = rt.totalMemory();
         long usedMemory = totalMemory - rt.freeMemory();
 
-        // Imprimir los resultados
         System.out.println("Cantidad de memoria RAM consumida: " + usedMemory + " bytes");
         System.out.println("Tiempo de ejecución promedio: " + (duration / 1000.0) + " segundos");
     }
@@ -72,7 +64,7 @@ public class Main {
                     listarPilotosActivos(scanner);
                     break;
                 case 2:
-                    topUsuariosConMasTweets(scanner);
+                    topUsuariosConMasTweets2(scanner);
                     break;
                 case 3:
                     cantidadHashtagsDistintos(scanner);
@@ -120,7 +112,7 @@ public class Main {
         int year = scanner.nextInt();
         System.out.print("Ingrese el mes: ");
         int month = scanner.nextInt();
-        Calculareficiencia(() -> {
+        calcularEficiencia(() -> {
             Node<Tweets> currentTweet = Csv.getTweets().getFirst();
             while (currentTweet != null){
                 Node<String> currentDriver = Csv.getDriversLinkedList().getFirst();
@@ -165,6 +157,17 @@ public class Main {
 
         createTop15UsersList(users, top15);
         usersByTweetsQty(top15);
+
+    }
+
+    private static void topUsuariosConMasTweets2(Scanner scanner) {
+        MyLinkedList<User> users = Csv.getUsers();
+        users.quicksort();
+        System.out.println("Top 15 usuarios con más tweets:");
+        for (int i = 0; i < 15; i++) {
+            System.out.println("(" + i + ") " +  users.get(i).getName() + " con " + users.get(i).getTweets().size() + " tweets.");
+        }
+
 
     }
 
@@ -215,7 +218,7 @@ public class Main {
         System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
         scanner.nextLine();
         String date = scanner.nextLine();
-        Calculareficiencia(() -> {
+        calcularEficiencia(() -> {
             int hashtagQty = 0;
             MyLinkedList<String> hashtagMyLinkedList = new MyLinkedList<>();
             try {
@@ -251,7 +254,7 @@ public class Main {
         System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
         scanner.nextLine();
         String date = scanner.nextLine();
-        Calculareficiencia(() -> {
+        calcularEficiencia(() -> {
             String maxHashtag = null;
             int maxCount = 0;
             try {
@@ -298,7 +301,7 @@ public class Main {
     }
 
     private static void topCuentasConMasFavoritos(Scanner scanner) {
-        Calculareficiencia(() -> {
+        calcularEficiencia(() -> {
             MyLinkedList<User> listaUsers = Csv.getUsers();
             MyHeap<User> heapUsers = new MyHeap<>(true, false, listaUsers);
             System.out.println("Top 7 cuentas con más favoritos: ");
@@ -314,7 +317,7 @@ public class Main {
             System.out.print("Ingrese la palabra clave: ");
             scanner.nextLine();
             String keyword = scanner.nextLine();
-        Calculareficiencia(() -> {
+        calcularEficiencia(() -> {
             int count = 0;
             Node<Tweets> current = Csv.getTweets().getFirst(); // Accede a la lista enlazada de tweets
             while (current != null) {
