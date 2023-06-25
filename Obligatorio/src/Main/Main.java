@@ -1,8 +1,8 @@
-import adt.hashtable.HashNode;
-import adt.hashtable.MyHashTable;
-import adt.heap.MyHeap;
-import adt.linkedlist.MyLinkedList;
-import adt.linkedlist.Node;
+import uy.edu.um.prog2.adt.hashtable.HashNode;
+import uy.edu.um.prog2.adt.hashtable.MyHashTable;
+import uy.edu.um.prog2.adt.heap.MyHeap;
+import uy.edu.um.prog2.adt.linkedlist.MyLinkedList;
+import uy.edu.um.prog2.adt.linkedlist.Node;
 import entities.User;
 import entities.Hashtag;
 import entities.Tweets;
@@ -18,6 +18,27 @@ public class Main {
         Csv.GetDriversInfo();
         Csv.GetUsersInfo();
         start();
+    }
+
+    public static void Calculareficiencia(Runnable code) {
+        // Inicio de la medición del tiempo de ejecución
+        long startTime = System.currentTimeMillis();
+
+        // Ejecución del código
+        code.run();
+
+        // Finalización de la medición del tiempo de ejecución
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime; // Duración en milisegundos
+
+        // Cálculo de la cantidad de memoria consumida
+        Runtime rt = Runtime.getRuntime();
+        long totalMemory = rt.totalMemory();
+        long usedMemory = totalMemory - rt.freeMemory();
+
+        // Imprimir los resultados
+        System.out.println("Cantidad de memoria RAM consumida: " + usedMemory + " bytes");
+        System.out.println("Tiempo de ejecución promedio: " + (duration / 1000.0) + " segundos");
     }
 
     private static boolean isValidDate(String date) {
@@ -286,21 +307,25 @@ public class Main {
 
     private static void contarTweetsConPalabraFrase(Scanner scanner) {
 
-        System.out.print("Ingrese la palabra clave: ");
-        scanner.nextLine();
-        String keyword = scanner.nextLine();
-        int count = 0;
-        Node<Tweets> current = Csv.getTweets().getFirst(); // Accede a la lista enlazada de tweets
 
-        while (current != null) {
-            Tweets tweet = current.getValue();
-            if (tweet.getContent().toLowerCase().contains(keyword.toLowerCase())) {
-                count++;
+            System.out.print("Ingrese la palabra clave: ");
+            scanner.nextLine();
+            String keyword = scanner.nextLine();
+        Calculareficiencia(() -> {
+            int count = 0;
+            Node<Tweets> current = Csv.getTweets().getFirst(); // Accede a la lista enlazada de tweets
+
+            while (current != null) {
+                Tweets tweet = current.getValue();
+                if (tweet.getContent().toLowerCase().contains(keyword.toLowerCase())) {
+                    count++;
+                }
+                current = current.getNext();
             }
-            current = current.getNext();
-        }
 
-        System.out.println("Número de tweets con la palabra o frase '" + keyword + "': " + count);
+            System.out.println("Número de tweets con la palabra o frase '" + keyword + "': " + count);
+        });
+
 
     }
 }

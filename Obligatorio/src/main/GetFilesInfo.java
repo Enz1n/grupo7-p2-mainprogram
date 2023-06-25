@@ -1,7 +1,7 @@
 import entities.Hashtag;
 import entities.Tweets;
 import entities.User;
-import adt.linkedlist.MyLinkedList;
+import uy.edu.um.prog2.adt.linkedlist.MyLinkedList;
 import exception.FileNotValidException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -9,9 +9,6 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 
 
 public class GetFilesInfo {
@@ -86,11 +83,9 @@ public class GetFilesInfo {
                     }else {
                         user.getTweets().add(tweet);
                         Users.add(user);
-                        System.out.println();
                     }
                 } catch (Exception ignored) {}
             }
-            System.out.println("Total de registros procesados: " + count);
         } catch (IOException e) {
             throw new FileNotValidException("FILE_ERROR_FORMAT", e);
         }

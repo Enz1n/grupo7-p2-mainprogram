@@ -1,6 +1,6 @@
 package entities;
 
-import adt.linkedlist.MyLinkedList;
+import uy.edu.um.prog2.adt.linkedlist.MyLinkedList;
 
 import java.util.Objects;
 
