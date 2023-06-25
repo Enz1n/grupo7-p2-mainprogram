@@ -2,7 +2,9 @@ package uy.edu.um.prog2.adt.queue;
 
 public class PriorityQueue<T> implements MyPriorityQueue<T> {
 
+
     private NodoPriority<T> primero;
+
 
     private NodoPriority<T> ultimo;
 

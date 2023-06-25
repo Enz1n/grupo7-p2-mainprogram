@@ -19,7 +19,7 @@ public class GetFilesInfo {
     public  MyLinkedList<Tweets> Tweets = new MyLinkedList<>();
 
     public void GetDriversInfo() {
-        Main.Calculareficiencia(() -> {
+        Main.calcularEficiencia(() -> {
             System.out.println("Leyendo archivo de conductores...");
             try (BufferedReader br = new BufferedReader(new FileReader(driversFile))) {
                 String line;
@@ -45,7 +45,7 @@ public class GetFilesInfo {
     }
 
     public void GetUsersInfo() throws FileNotValidException {
-        Main.Calculareficiencia(() -> {
+        Main.calcularEficiencia(() -> {
             System.out.println("Leyendo archivo de usuarios...");
             try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
                  CSVParser csvParser = new CSVParser(br, CSVFormat.DEFAULT)) {
