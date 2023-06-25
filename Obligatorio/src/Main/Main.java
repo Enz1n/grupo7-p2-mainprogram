@@ -41,7 +41,7 @@ public class Main {
         System.out.println("Tiempo de ejecución promedio: " + (duration / 1000.0) + " segundos");
     }
 
-    private static boolean isValidDate(String date) {
+    private static boolean isValidDate(String date) throws InvalidDateException {
         String dateFormatRegex = "\\d{4}-\\d{2}-\\d{2}";
 
         if (date.matches(dateFormatRegex)) {
@@ -52,6 +52,8 @@ public class Main {
             if ((year == 2021 && month >= 7) || (year == 2022 && month <= 8)) {
                 return true;
             }
+        }else{
+            throw new InvalidDateException("Fecha fuera del rango permitido o formato inválido.");
         }
 
         return false;
@@ -113,51 +115,48 @@ public class Main {
     }
 
     private static void listarPilotosActivos(Scanner scanner) {
-
         MyHashTable<String,Integer> hashTable = new MyHashTable<>();
         System.out.print("Ingrese el año: ");
         int year = scanner.nextInt();
         System.out.print("Ingrese el mes: ");
         int month = scanner.nextInt();
-
-
-        Node<Tweets> currentTweet = Csv.getTweets().getFirst();
-
-        while (currentTweet != null){
-            Node<String> currentDriver = Csv.getDriversLinkedList().getFirst();
-            String fechaTweet = currentTweet.getValue().getDate();
-            String[] fechaTweetArray = fechaTweet.split("-");
-            int yearTweet = Integer.parseInt(fechaTweetArray[0]);
-            int monthTweet = Integer.parseInt(fechaTweetArray[1]);
-            if ((yearTweet == year && monthTweet == month)){
-                while (currentDriver != null) {
-                    String tweetContent = currentTweet.getValue().getContent().toLowerCase();
-                    String driverName = currentDriver.getValue().toLowerCase();
-
-                    if (!hashTable.contains(currentDriver.getValue().toLowerCase())) {
-                        hashTable.put(currentDriver.getValue().toLowerCase(), 0);
+        Calculareficiencia(() -> {
+            Node<Tweets> currentTweet = Csv.getTweets().getFirst();
+            while (currentTweet != null){
+                Node<String> currentDriver = Csv.getDriversLinkedList().getFirst();
+                String fechaTweet = currentTweet.getValue().getDate();
+                String[] fechaTweetArray = fechaTweet.split("-");
+                int yearTweet = Integer.parseInt(fechaTweetArray[0]);
+                int monthTweet = Integer.parseInt(fechaTweetArray[1]);
+                if ((yearTweet == year && monthTweet == month)){
+                    while (currentDriver != null) {
+                        String tweetContent = currentTweet.getValue().getContent().toLowerCase();
+                        String driverName = currentDriver.getValue().toLowerCase();
+                        if (!hashTable.contains(currentDriver.getValue().toLowerCase())) {
+                            hashTable.put(currentDriver.getValue().toLowerCase(), 0);
+                        }
+                        if ((tweetContent.toLowerCase().contains(driverName))) {
+                            HashNode<String, Integer> driverChange = hashTable.get(currentDriver.getValue());
+                            driverChange.setValue(driverChange.getValue() + 1);
+                        }
+                        currentDriver = currentDriver.getNext();
                     }
-                    if ((tweetContent.toLowerCase().contains(driverName))) {
-                        HashNode<String, Integer> driverChange = hashTable.get(currentDriver.getValue());
-                        driverChange.setValue(driverChange.getValue() + 1);
-                    }
-                    currentDriver = currentDriver.getNext();
                 }
+                currentTweet = currentTweet.getNext();
             }
-            currentTweet = currentTweet.getNext();
-        }
-        MyLinkedList<HashNode<String,Integer>> allEntries = hashTable.getAllEntries();
-        MyHeap<HashNode<String,Integer>> heapDrivers = new MyHeap<>(true, false);
-        Node<HashNode<String,Integer>> currentNode = allEntries.getFirst();
-        while (currentNode != null){
-            heapDrivers.insert(currentNode.getValue());
-            currentNode = currentNode.getNext();
-        }
-        HashNode<String,Integer>[] top10 = new HashNode[10];
-        for (int i = 0; i < 10 ; i++){
-            top10[i] = heapDrivers.deleteAndReturn();
-            System.out.println(top10[i].getKey() + " con " + top10[i].getValue() + " ocurrencias.");
-        }
+            MyLinkedList<HashNode<String,Integer>> allEntries = hashTable.getAllEntries();
+            MyHeap<HashNode<String,Integer>> heapDrivers = new MyHeap<>(true, false);
+            Node<HashNode<String,Integer>> currentNode = allEntries.getFirst();
+            while (currentNode != null){
+                heapDrivers.insert(currentNode.getValue());
+                currentNode = currentNode.getNext();
+            }
+            HashNode<String,Integer>[] top10 = new HashNode[10];
+            for (int i = 0; i < 10 ; i++){
+                top10[i] = heapDrivers.deleteAndReturn();
+                System.out.println(top10[i].getKey() + " con " + top10[i].getValue() + " ocurrencias.");
+            }
+        });
     }
 
     private static void topUsuariosConMasTweets(Scanner scanner) {
@@ -212,37 +211,37 @@ public class Main {
         }
     }
 
-
-
-
-
-
-
     private static void cantidadHashtagsDistintos(Scanner scanner) throws InvalidDateException {
         System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
         scanner.nextLine();
         String date = scanner.nextLine();
-        int hashtagQty = 0;
-        MyLinkedList<String> hashtagMyLinkedList = new MyLinkedList<>();
-        if (isValidDate(date)) {
-            Node<Tweets> current = Csv.getTweets().getFirst();
-            while (current != null) {
-                String tweetDate = current.getValue().getDate();
-                if (tweetDate.equals(date)) {
-                    Node<Hashtag> currentHashtag = current.getValue().getHashtags().getFirst();
-                    while (currentHashtag != null) {
-                        String hashtagText = currentHashtag.getValue().getText().toLowerCase();
-                        if (!(hashtagMyLinkedList.contains(hashtagText))) {
-                            hashtagMyLinkedList.add(hashtagText);
-                            hashtagQty++;
+        Calculareficiencia(() -> {
+            int hashtagQty = 0;
+            MyLinkedList<String> hashtagMyLinkedList = new MyLinkedList<>();
+            try {
+                if (isValidDate(date)) {
+                    Node<Tweets> current = Csv.getTweets().getFirst();
+                    while (current != null) {
+                        String tweetDate = current.getValue().getDate();
+                        if (tweetDate.equals(date)) {
+                            Node<Hashtag> currentHashtag = current.getValue().getHashtags().getFirst();
+                            while (currentHashtag != null) {
+                                String hashtagText = currentHashtag.getValue().getText().toLowerCase();
+                                if (!(hashtagMyLinkedList.contains(hashtagText))) {
+                                    hashtagMyLinkedList.add(hashtagText);
+                                    hashtagQty++;
+                                }
+                                currentHashtag = currentHashtag.getNext();
+                            }
                         }
-                        currentHashtag = currentHashtag.getNext();
+                        current = current.getNext();
                     }
+                    System.out.println("La cantidad de hashtags distintos para el día " + date + " es: " + hashtagQty);
                 }
-                current = current.getNext();
+            } catch (InvalidDateException e) {
+                throw new RuntimeException(e);
             }
-            System.out.println("La cantidad de hashtags distintos para el día " + date + " es: " + hashtagQty);
-        }else throw new InvalidDateException("Fecha fuera del rango permitido o formato inválido.");
+        });
     }
 
 
@@ -252,69 +251,72 @@ public class Main {
         System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
         scanner.nextLine();
         String date = scanner.nextLine();
-        String maxHashtag = null;
-        int maxCount = 0;
-        if (isValidDate(date)) {
-            Node<Tweets> current = Csv.getTweets().getFirst();
-            while (current != null) {
-                String tweetDate = current.getValue().getDate();
-                if (tweetDate.equals(date)) {
-                    Node<Hashtag> currentHashtag = current.getValue().getHashtags().getFirst();
-                    while (currentHashtag != null) {
-                        String hashtagText = currentHashtag.getValue().getText();
-                        if (!(hashtagHash.contains(hashtagText))) {
-                            if (!currentHashtag.getValue().getText().equalsIgnoreCase("f1")) {
-                                hashtagHash.put(currentHashtag.getValue().getText(), 1);
-                            }
-                        } else {
-                            HashNode<String, Integer> changeNode = hashtagHash.get(currentHashtag.getValue().getText());
-                            int newCount = changeNode.getValue() + 1;
-                            changeNode.setValue(newCount);
+        Calculareficiencia(() -> {
+            String maxHashtag = null;
+            int maxCount = 0;
+            try {
+                if (isValidDate(date)) {
+                    Node<Tweets> current = Csv.getTweets().getFirst();
+                    while (current != null) {
+                        String tweetDate = current.getValue().getDate();
+                        if (tweetDate.equals(date)) {
+                            Node<Hashtag> currentHashtag = current.getValue().getHashtags().getFirst();
+                            while (currentHashtag != null) {
+                                String hashtagText = currentHashtag.getValue().getText();
+                                if (!(hashtagHash.contains(hashtagText))) {
+                                    if (!currentHashtag.getValue().getText().equalsIgnoreCase("f1")) {
+                                        hashtagHash.put(currentHashtag.getValue().getText(), 1);
+                                    }
+                                } else {
+                                    HashNode<String, Integer> changeNode = hashtagHash.get(currentHashtag.getValue().getText());
+                                    int newCount = changeNode.getValue() + 1;
+                                    changeNode.setValue(newCount);
 
-                            if (newCount > maxCount) {
-                                maxHashtag = hashtagText;
-                                maxCount = newCount;
+                                    if (newCount > maxCount) {
+                                        maxHashtag = hashtagText;
+                                        maxCount = newCount;
+                                    }
+                                }
+                                currentHashtag = currentHashtag.getNext();
                             }
                         }
-                        currentHashtag = currentHashtag.getNext();
+                        current = current.getNext();
                     }
                 }
-                current = current.getNext();
+            } catch (InvalidDateException e) {
+                throw new RuntimeException(e);
             }
 
-
-        } else throw new InvalidDateException("Fecha fuera del rango permitido o formato inválido.");
-        // Verificar si se encontró un hashtag más utilizado
-        if (maxHashtag != null) {
-            System.out.println("El hashtag más utilizado es: " + maxHashtag);
-            System.out.println("Aparece " + maxCount + " veces.");
-        } else {
-            System.out.println("No se encontró ningún hashtag en la tabla.");
-        }
-
+            // Verificar si se encontró un hashtag más utilizado
+            if (maxHashtag != null) {
+                System.out.println("El hashtag más utilizado es: " + maxHashtag);
+                System.out.println("Aparece " + maxCount + " veces.");
+            } else {
+                System.out.println("No se encontró ningún hashtag en la tabla.");
+            }
+        });
     }
 
     private static void topCuentasConMasFavoritos(Scanner scanner) {
-        MyLinkedList<User> listaUsers = Csv.getUsers();
-        MyHeap<User> heapUsers = new MyHeap<>(true, false, listaUsers);
-        System.out.println("Top 7 cuentas con más favoritos: ");
-        for (int i = 0; i < 7; i++) {
-            User user = heapUsers.deleteAndReturn();
-            System.out.println(user.getName() + " con " + user.getFavourites() + " favoritos.");
-        }
+        Calculareficiencia(() -> {
+            MyLinkedList<User> listaUsers = Csv.getUsers();
+            MyHeap<User> heapUsers = new MyHeap<>(true, false, listaUsers);
+            System.out.println("Top 7 cuentas con más favoritos: ");
+            for (int i = 0; i < 7; i++) {
+                User user = heapUsers.deleteAndReturn();
+                System.out.println(user.getName() + " con " + user.getFavourites() + " favoritos.");
+            }
+        });
     }
 
 
     private static void contarTweetsConPalabraFrase(Scanner scanner) {
-
-
             System.out.print("Ingrese la palabra clave: ");
             scanner.nextLine();
             String keyword = scanner.nextLine();
         Calculareficiencia(() -> {
             int count = 0;
             Node<Tweets> current = Csv.getTweets().getFirst(); // Accede a la lista enlazada de tweets
-
             while (current != null) {
                 Tweets tweet = current.getValue();
                 if (tweet.getContent().toLowerCase().contains(keyword.toLowerCase())) {
@@ -322,10 +324,7 @@ public class Main {
                 }
                 current = current.getNext();
             }
-
             System.out.println("Número de tweets con la palabra o frase '" + keyword + "': " + count);
         });
-
-
     }
 }
