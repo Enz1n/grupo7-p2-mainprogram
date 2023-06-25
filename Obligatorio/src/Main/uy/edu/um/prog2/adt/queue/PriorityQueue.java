@@ -96,6 +96,11 @@ public class PriorityQueue<T> implements MyPriorityQueue<T> {
 
     }
 
+    @Override
+    public T dequeuerigth() throws EmptyQueueException {
+        return null;
+    }
+
 
     @Override
     public void enqueuerigth(T element, int priority) {
@@ -110,8 +115,18 @@ public class PriorityQueue<T> implements MyPriorityQueue<T> {
         }
     }
 
-    public T dequeuerigth() throws EmptyQueueException {
-        return null;
+    public T dequeueRight() throws EmptyQueueException {
+        if (isEmpty()) {
+            throw new EmptyQueueException("La cola está vacía");
+        }
+        NodoPriority<T> nodoPrioridad = getPrimero();
+        setPrimero(nodoPrioridad.getSiguiente());
+
+        if (getPrimero() == null) {
+            setUltimo(null);
+        }
+
+        return nodoPrioridad.getValue();
     }
 
     public T dequeueleft() throws EmptyQueueException {

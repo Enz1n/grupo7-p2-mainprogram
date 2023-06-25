@@ -75,7 +75,7 @@ public class Queue<T> implements MyQueue<T>{
     public T dequeuerigth() throws EmptyQueueException {
         T item = null;
         if (isEmpty()) {
-            throw new EmptyQueueException();
+            throw new EmptyQueueException("La cola está vacía");
         } else {
             item = getUltimo().getValue();
             Nodo<T> aux = getPrimero();
@@ -98,7 +98,7 @@ public class Queue<T> implements MyQueue<T>{
     public T dequeueleft() throws EmptyQueueException {
         T item = null;
         if (isEmpty()) {
-            throw new EmptyQueueException();
+            throw new EmptyQueueException("La cola está vacía");
         } else {
             item = getPrimero().getValue();
             setPrimero(getPrimero().getSiguiente());

@@ -12,7 +12,7 @@ import java.io.IOException;
 
 
 public class GetFilesInfo {
-    private static final String csvFile = "src/main/resources/f1_dataset.csv";
+    private static final String csvFile = "src/main/resources/f1_dataset_test.csv";
     private static final String driversFile = "src/main/resources/drivers.txt";
     public MyLinkedList<String> driversLinkedList = new MyLinkedList<>();
     public  MyLinkedList<User> Users = new MyLinkedList<>();

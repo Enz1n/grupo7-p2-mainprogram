@@ -8,12 +8,15 @@ import entities.Hashtag;
 import entities.Tweets;
 import exception.FileNotValidException;
 import exception.InvalidDateException;
+import uy.edu.um.prog2.adt.queue.EmptyQueueException;
+import uy.edu.um.prog2.adt.queue.PriorityQueue;
 
 import java.util.Scanner;
 
 public class Main {
     private static GetFilesInfo Csv;
-    public static void main(String[] args) throws FileNotValidException, InvalidDateException {
+
+    public static void main(String[] args) throws FileNotValidException, InvalidDateException, EmptyQueueException {
         Csv = new GetFilesInfo();
         Csv.GetDriversInfo();
         Csv.GetUsersInfo();
@@ -44,14 +47,14 @@ public class Main {
             if ((year == 2021 && month >= 7) || (year == 2022 && month <= 8)) {
                 return true;
             }
-        }else{
+        } else {
             throw new InvalidDateException("Fecha fuera del rango permitido o formato inválido.");
         }
 
         return false;
     }
 
-    private static void start() throws  InvalidDateException {
+    private static void start() throws InvalidDateException, EmptyQueueException {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
 
@@ -64,7 +67,7 @@ public class Main {
                     listarPilotosActivos(scanner);
                     break;
                 case 2:
-                    topUsuariosConMasTweets2(scanner);
+                    topUsuariosConMasTweets(scanner);
                     break;
                 case 3:
                     cantidadHashtagsDistintos(scanner);
@@ -107,20 +110,20 @@ public class Main {
     }
 
     private static void listarPilotosActivos(Scanner scanner) {
-        MyHashTable<String,Integer> hashTable = new MyHashTable<>();
+        MyHashTable<String, Integer> hashTable = new MyHashTable<>();
         System.out.print("Ingrese el año: ");
         int year = scanner.nextInt();
         System.out.print("Ingrese el mes: ");
         int month = scanner.nextInt();
         calcularEficiencia(() -> {
             Node<Tweets> currentTweet = Csv.getTweets().getFirst();
-            while (currentTweet != null){
+            while (currentTweet != null) {
                 Node<String> currentDriver = Csv.getDriversLinkedList().getFirst();
                 String fechaTweet = currentTweet.getValue().getDate();
                 String[] fechaTweetArray = fechaTweet.split("-");
                 int yearTweet = Integer.parseInt(fechaTweetArray[0]);
                 int monthTweet = Integer.parseInt(fechaTweetArray[1]);
-                if ((yearTweet == year && monthTweet == month)){
+                if ((yearTweet == year && monthTweet == month)) {
                     while (currentDriver != null) {
                         String tweetContent = currentTweet.getValue().getContent().toLowerCase();
                         String driverName = currentDriver.getValue().toLowerCase();
@@ -136,82 +139,43 @@ public class Main {
                 }
                 currentTweet = currentTweet.getNext();
             }
-            MyLinkedList<HashNode<String,Integer>> allEntries = hashTable.getAllEntries();
-            MyHeap<HashNode<String,Integer>> heapDrivers = new MyHeap<>(true, false);
-            Node<HashNode<String,Integer>> currentNode = allEntries.getFirst();
-            while (currentNode != null){
+            MyLinkedList<HashNode<String, Integer>> allEntries = hashTable.getAllEntries();
+            MyHeap<HashNode<String, Integer>> heapDrivers = new MyHeap<>(true, false);
+            Node<HashNode<String, Integer>> currentNode = allEntries.getFirst();
+            while (currentNode != null) {
                 heapDrivers.insert(currentNode.getValue());
                 currentNode = currentNode.getNext();
             }
-            HashNode<String,Integer>[] top10 = new HashNode[10];
-            for (int i = 0; i < 10 ; i++){
+            HashNode<String, Integer>[] top10 = new HashNode[10];
+            for (int i = 0; i < 10; i++) {
                 top10[i] = heapDrivers.deleteAndReturn();
                 System.out.println(top10[i].getKey() + " con " + top10[i].getValue() + " ocurrencias.");
             }
         });
     }
 
-    private static void topUsuariosConMasTweets(Scanner scanner) {
-        MyLinkedList<User> users = Csv.getUsers();
-        MyLinkedList<User> top15 = new MyLinkedList<>();
+    private static void topUsuariosConMasTweets(Scanner scanner) throws EmptyQueueException {
+        calcularEficiencia(() ->{
+            PriorityQueue<User> usuariosOrdenados = new PriorityQueue<>();
+            MyLinkedList<User> usuarios = Csv.getUsers();
 
-        createTop15UsersList(users, top15);
-        usersByTweetsQty(top15);
-
-    }
-
-    private static void topUsuariosConMasTweets2(Scanner scanner) {
-        MyLinkedList<User> users = Csv.getUsers();
-        users.quicksort();
-        System.out.println("Top 15 usuarios con más tweets:");
-        for (int i = 0; i < 15; i++) {
-            System.out.println("(" + i + ") " +  users.get(i).getName() + " con " + users.get(i).getTweets().size() + " tweets.");
-        }
-
-
-    }
-
-    public static void createTop15UsersList(MyLinkedList<User> users, MyLinkedList<User> top15) {
-        for (int i = 0; i < users.size(); i++) {
-            User currentUser = users.get(i);
-            if (top15.contains(currentUser)) {
-                continue;
+            for (int i = 0; i < usuarios.size(); i++) {
+                User usuario = usuarios.get(i);
+                int tweetSize = usuario.getTweets().size();
+                usuariosOrdenados.enqueueWithPriority(usuario, tweetSize);
             }
-            if (top15.size() < 15) {
-                top15.add(currentUser);
-            } else {
 
-                int minIndex = 0;
-                for (int j = 1; j < top15.size(); j++) {
-                    if (top15.get(j).getTweets().size() < top15.get(minIndex).getTweets().size()) {
-                        minIndex = j;
-                    }
+            for (int i = 0; i < 15; i++) {
+                User usuario = null;
+                try {
+                    usuario = usuariosOrdenados.dequeueRight();
+                } catch (EmptyQueueException e) {
+                    throw new RuntimeException(e);
                 }
-                if (currentUser.getTweets().size() > top15.get(minIndex).getTweets().size()) {
-                    top15.remove(top15.get(minIndex));
-                    top15.add(currentUser);
-                }
+                int posicion = i + 1;
+                System.out.println("(" + posicion + ") " + usuario.getName() + " con " + usuario.getTweets().size() + " tweets.");
             }
-        }
-    }
-
-    public static void usersByTweetsQty(MyLinkedList<User> users) {
-        int n = users.size();
-
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                User user1 = users.get(j);
-                User user2 = users.get(j + 1);
-
-                if (user1.getTweets().size() < user2.getTweets().size()) {
-                    users.swap(j, j + 1);
-                }
-            }
-        }
-        System.out.println("Top 15 usuarios con más tweets:");
-        for (int i = 0; i < 15; i++) {
-            System.out.println(users.get(i).getName() + " con " + users.get(i).getTweets().size() + " tweets.");
-        }
+        });
     }
 
     private static void cantidadHashtagsDistintos(Scanner scanner) throws InvalidDateException {
@@ -246,8 +210,6 @@ public class Main {
             }
         });
     }
-
-
 
     private static void hashtagMasUsado(Scanner scanner) throws  InvalidDateException {
         MyHashTable<String,Integer> hashtagHash = new MyHashTable<>();
@@ -307,19 +269,19 @@ public class Main {
             System.out.println("Top 7 cuentas con más favoritos: ");
             for (int i = 0; i < 7; i++) {
                 User user = heapUsers.deleteAndReturn();
-                System.out.println(user.getName() + " con " + user.getFavourites() + " favoritos.");
+                int posicion = i + 1;
+                System.out.println("(" + posicion + ") " + user.getName() + " con " + user.getFavourites() + " favoritos.");
             }
         });
     }
 
-
     private static void contarTweetsConPalabraFrase(Scanner scanner) {
-            System.out.print("Ingrese la palabra clave: ");
-            scanner.nextLine();
-            String keyword = scanner.nextLine();
+        System.out.println("Ingrese la palabra clave: ");
+        scanner.nextLine();
+        String keyword = scanner.nextLine();
         calcularEficiencia(() -> {
             int count = 0;
-            Node<Tweets> current = Csv.getTweets().getFirst(); // Accede a la lista enlazada de tweets
+            Node<Tweets> current = Csv.getTweets().getFirst();
             while (current != null) {
                 Tweets tweet = current.getValue();
                 if (tweet.getContent().toLowerCase().contains(keyword.toLowerCase())) {
@@ -331,3 +293,4 @@ public class Main {
         });
     }
 }
+
