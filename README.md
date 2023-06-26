@@ -8,12 +8,12 @@ El diagrama UML representa la estructura y relaciones de clases en la aplicació
 
 El UML incluye las siguientes clases principales:
 
-- `App`: La clase principal que contiene el punto de entrada del programa.
-- `Csv`: Clase encargada de la carga y procesamiento de los datos de los archivos CSV.
+- `Main`: La clase principal que contiene el punto de entrada del programa.
+- `GetFilesInfo`: Clase encargada de la carga y procesamiento de los datos de los archivos CSV.
 - `User`: Representa a un usuario de Twitter y contiene información relacionada con los tweets.
 - `Tweet`: Representa un tweet y contiene información como el contenido, la fecha y los hashtags.
 
-![UML de la Aplicación](ruta/uml_app.png)
+![UML de la Aplicación](Obligatorio/src/Main/resources)
 
 ## Carga de datos
 
