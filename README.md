@@ -47,9 +47,14 @@ Esta función genera un reporte de los 10 pilotos activos más mencionados en lo
 
 El código recorre los tweets y, para cada tweet, busca menciones de pilotos. Si se encuentra una coincidencia, se actualiza la cuenta de menciones en la tabla hash. Al final, se obtienen los 10 pilotos con más menciones y se muestran en pantalla.
 
-### 2. `topUsuariosConMasTweets(Scanner scanner)`
+### `topUsuariosConMasTweets(Scanner scanner)`
 
-Esta función genera un reporte de los 15 usuarios con más tweets. Utiliza una lista enlazada (`MyLinkedList`) para almacenar y ordenar los usuarios por la cantidad de tweets. El código itera sobre la lista de usuarios y utiliza el método `createTop15UsersList` para crear una nueva lista con los usuarios con más tweets. Luego, se utiliza el método `usersByTweetsQty` para ordenar la lista y mostrar los usuarios con más tweets en pantalla.
+Esta función genera un informe de los 15 usuarios con más tweets. Utiliza una estructura de datos de cola de prioridad (`PriorityQueue`) para almacenar y ordenar los usuarios según la cantidad de tweets que han publicado. Primero, se obtiene la lista de usuarios a partir del archivo CSV utilizando el método `getUsers` de la clase `Csv`. Luego, se itera sobre la lista de usuarios y se agrega cada usuario a la cola de prioridad, asignando la prioridad según el tamaño de su lista de tweets.
+
+Después de que todos los usuarios se agregan a la cola de prioridad, se realiza un bucle para obtener los 15 usuarios con más tweets. En cada iteración, se extrae el usuario con mayor prioridad de la cola (es decir, el usuario con más tweets) utilizando el método `dequeueRight`. Se muestra en pantalla la posición, nombre del usuario y la cantidad de tweets que ha publicado.
+
+**Nota:** Esta función puede lanzar una excepción `EmptyQueueException` si la cola de prioridad está vacía en el momento de la extracción del usuario con mayor prioridad.
+
 
 ### 3. `cantidadHashtagsDistintos(Scanner scanner)`
 
@@ -69,3 +74,13 @@ Esta función genera un reporte del número de tweets que contienen una palabra 
 
 
 Si el usuario ya existe en la lista `Users`, se obtiene una referencia al usuario existente y se agrega el tweet a su lista de tweets. De lo contrario, se crea un nuevo objeto `User` y se le asignan los valores correspondientes, incluido el tweet actual.
+
+
+### Calcular Eficiencia
+
+Todas las funciones mencionadas en este proyecto utilizan la función `calcularEficiencia` para medir y mostrar la eficiencia de su ejecución. Esta función toma como argumento un objeto `Runnable` que contiene el código a medir.
+
+Al llamar a la función `calcularEficiencia`, se registra el tiempo de inicio antes de ejecutar el código y el tiempo de finalización después de ejecutarlo. Luego, se calcula la duración de ejecución y se muestra en segundos. Además, se obtiene la cantidad de memoria RAM total y la memoria utilizada por el código y se muestra en bytes.
+
+El uso de la función `calcularEficiencia` permite evaluar el rendimiento de cada función y obtener información sobre su consumo de memoria y tiempo de ejecución.
+
