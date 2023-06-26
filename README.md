@@ -13,7 +13,7 @@ El UML incluye las siguientes clases principales:
 - `User`: Representa a un usuario de Twitter y contiene información relacionada con los tweets.
 - `Tweet`: Representa un tweet y contiene información como el contenido, la fecha y los hashtags.
 
-![UML de la Aplicación](Obligatorio/src/Main/resources)
+![UML de la Aplicación](Obligatorio/src/Main/resources/UML.jpg)
 
 ## Carga de datos
 
