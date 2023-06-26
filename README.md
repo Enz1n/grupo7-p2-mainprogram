@@ -47,7 +47,7 @@ Esta función genera un reporte de los 10 pilotos activos más mencionados en lo
 
 El código recorre los tweets y, para cada tweet, busca menciones de pilotos. Si se encuentra una coincidencia, se actualiza la cuenta de menciones en la tabla hash. Al final, se obtienen los 10 pilotos con más menciones y se muestran en pantalla.
 
-### `topUsuariosConMasTweets(Scanner scanner)`
+### 2.`topUsuariosConMasTweets(Scanner scanner)`
 
 Esta función genera un informe de los 15 usuarios con más tweets. Utiliza una estructura de datos de cola de prioridad (`PriorityQueue`) para almacenar y ordenar los usuarios según la cantidad de tweets que han publicado. Primero, se obtiene la lista de usuarios a partir del archivo CSV utilizando el método `getUsers` de la clase `Csv`. Luego, se itera sobre la lista de usuarios y se agrega cada usuario a la cola de prioridad, asignando la prioridad según el tamaño de su lista de tweets.
 
