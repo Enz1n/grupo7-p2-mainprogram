@@ -2,6 +2,19 @@
 
 El proyecto consiste en una aplicación de análisis de datos de tweets relacionados con la Fórmula 1. La aplicación carga los datos de un archivo CSV y un archivo de texto, y proporciona diferentes funcionalidades para obtener información útil a partir de los datos.
 
+### UML de la Aplicación
+
+El diagrama UML representa la estructura y relaciones de clases en la aplicación de análisis de datos de tweets relacionados con la Fórmula 1. El diagrama muestra las principales clases y sus asociaciones, lo que proporciona una visión general de la arquitectura del sistema.
+
+El UML incluye las siguientes clases principales:
+
+- `App`: La clase principal que contiene el punto de entrada del programa.
+- `Csv`: Clase encargada de la carga y procesamiento de los datos de los archivos CSV.
+- `User`: Representa a un usuario de Twitter y contiene información relacionada con los tweets.
+- `Tweet`: Representa un tweet y contiene información como el contenido, la fecha y los hashtags.
+
+![UML de la Aplicación](ruta/uml_app.png)
+
 ## Carga de datos
 
 La aplicación carga dos tipos de datos para su análisis:
